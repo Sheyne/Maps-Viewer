@@ -26,7 +26,7 @@
 	[[NSColor redColor]set];
 	Viewer *sv=((Viewer *)self.superview);
 	NSPoint pnt=GMMakePoint(41, -111, sv.zoom);
-	NSRectFill(NSOffsetRect(NSMakeRect(pnt.x*IMAGE_WIDTH, pnt.y*IMAGE_HEIGHT, 10, 10),-sv.center.x-IMAGE_WIDTH,-sv.center.y-IMAGE_HEIGHT));
+	//NSRectFill(NSOffsetRect(NSMakeRect(pnt.x*IMAGE_WIDTH, pnt.y*IMAGE_HEIGHT, 10, 10),-sv.center.x-IMAGE_WIDTH,-sv.center.y-IMAGE_HEIGHT));
 }
 -(BOOL)acceptsFirstResponder{
 	return YES;

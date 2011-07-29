@@ -17,7 +17,6 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom);
 {
 	NSMutableArray *_cells;
 	NSRect rect;
-	NSPoint _center;
 	NSPoint start;
 	NSPoint preDragOffset;
 	short zoom;
@@ -25,7 +24,6 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom);
 }
 
 @property (assign) short zoom;
-@property (assign) NSPoint center;
 @property (retain) NSMutableArray *cells;
 @property (retain) ImageGetter * getter;
 

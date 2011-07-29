@@ -28,7 +28,6 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom){
 @implementation Viewer
 
 @synthesize getter=_getter;
-@synthesize center=_center;
 @synthesize cells=_cells;
 @synthesize zoom;
 
@@ -46,7 +45,7 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom){
 		self.getter=[ImageGetter getter];
 		self.getter.delegate=self;
 		NSPoint pnt=GMMakePoint(41, -111, self.zoom);
-		self.center=NSMakePoint(pnt.x*IMAGE_WIDTH, pnt.y*IMAGE_HEIGHT);
+		self.frame=NSMakeRect(-pnt.x*IMAGE_WIDTH, -pnt.y*IMAGE_HEIGHT, self.frame.size.width, self.frame.size.height);
     }
     
     return self;
@@ -54,9 +53,13 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom){
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+	NSLog(@"I got called");
 	[super drawRect:dirtyRect];
 	[[NSColor redColor] set];
-	int arrayHeight=ceil(self.frame.size.height/IMAGE_HEIGHT)+2;
+	NSPoint pnt=GMMakePoint(41, -111, self.zoom);
+	NSLog(@"posi %f %f", self.frame.origin.x, self.frame.origin.x);
+	NSRectFill(NSMakeRect(pnt.x*IMAGE_WIDTH, pnt.y*IMAGE_HEIGHT, 500, 500));
+	/*int arrayHeight=ceil(self.frame.size.height/IMAGE_HEIGHT)+2;
 	int arrayWidth=ceil(self.frame.size.width/IMAGE_WIDTH)+2;
 	int i=0,j=0;
 	for (i=0; i<arrayWidth; i++)
@@ -69,6 +72,7 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom){
 			[image drawAtPoint:pnt fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
 	
 		}
+	 */
 }
 
 - (BOOL)acceptsFirstResponder
@@ -78,11 +82,11 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom){
 -(void)mouseDown:(NSEvent *)event
 {
 	start=event.locationInWindow;
-	preDragOffset=self.center;
+	preDragOffset=self.frame.origin;
 }
 -(void)mouseDragged:(NSEvent *)event
 {
-	self.center=NSMakePoint(start.x-event.locationInWindow.x+preDragOffset.x,event.locationInWindow.y-start.y+preDragOffset.y);
+	self.frame=NSMakeRect(start.x-event.locationInWindow.x+preDragOffset.x,event.locationInWindow.y-start.y+preDragOffset.y, self.frame.size.width, self.frame.size.height);
 }
 
 
