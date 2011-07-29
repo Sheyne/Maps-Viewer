@@ -32,9 +32,10 @@
 	return YES;
 }
 
-/*-(void)mouseDown:(NSEvent *)theEvent{
-	NSLog(@"event: %@",theEvent);
-	
-}*/
+-(void)mouseDown:(NSEvent *)theEvent{
+	//give event to super
+	[self.superview mouseDown:theEvent];
+
+}
 
 @end
