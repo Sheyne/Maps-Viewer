@@ -10,6 +10,7 @@
 
 @interface Overlay : NSView
 {
-	NSSet *waypoints;
+	NSMutableDictionary *paths;
 }
+@property (retain) NSMutableDictionary *paths;
 @end

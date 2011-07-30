@@ -7,6 +7,7 @@
 //
 
 #import "ImageGetter.h"
+#import "Viewer.h"
 
 @interface Coords : NSObject {
 @private
@@ -52,7 +53,7 @@
 
 @implementation ImageGetter
 
-@synthesize delegate=_delegate;
+@synthesize viewer=_viewer;
 
 - (id)init
 {
@@ -79,8 +80,8 @@
 	url=[NSString stringWithFormat:formatString, coord.x, coord.y, coord.z];
 	NSData* data=[NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
 	[data writeToFile:[[NSString stringWithFormat:@"~/Documents/Maps/x%d y%d z%d.jpg", coord.x, coord.y, coord.z] stringByExpandingTildeInPath]atomically:YES];
-	if ([self.delegate respondsToSelector:@selector(setNeedsDisplay:)]) {
-		[self.delegate setNeedsDisplay:YES];
+	if ([self.viewer respondsToSelector:@selector(setNeedsDisplay:)]) {
+		[self.viewer setNeedsDisplay:YES];
 	}
 }
 
@@ -93,7 +94,8 @@
 		*file=[[NSString stringWithFormat:formatString, x,y,z] stringByExpandingTildeInPath];
 		NSData *data=[NSData dataWithContentsOfFile:file];
 		if (!data) {
-			[self performSelectorInBackground:@selector(downloadImageAtCoords:) withObject:coord];
+			if (self.viewer.shouldLoadNewImages)
+				[self performSelectorInBackground:@selector(downloadImageAtCoords:) withObject:coord];
 			return nil;
 		}	
 		img=[[NSImage alloc] initWithData:data];

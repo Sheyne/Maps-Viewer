@@ -9,14 +9,15 @@
 #import <Foundation/Foundation.h>
 
 @class Coords;
+@class Viewer;
 @interface ImageGetter : NSObject
 {
 	NSMutableDictionary *images;
-	id _delegate;
+	Viewer *_viewer;
 	NSMutableArray *addressQueue;
 }
 
-@property (assign) id delegate;
+@property (assign) Viewer *viewer;
 
 -(NSImage *)imageForX: (int)x y:(int)y z:(int) z;
 -(void)downloadImageAtCoords:(Coords *)coord;

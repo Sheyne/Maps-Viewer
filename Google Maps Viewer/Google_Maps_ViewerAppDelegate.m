@@ -11,10 +11,13 @@
 @implementation Google_Maps_ViewerAppDelegate
 
 @synthesize window;
+@synthesize viewer=_viewer;
+@synthesize overlay=_overlay;
+@synthesize paths;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	// Insert code here to initialize your application
+	[self bind:@"paths" toObject:self.overlay withKeyPath:@"paths" options:nil];
 }
 
 @end

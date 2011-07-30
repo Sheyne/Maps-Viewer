@@ -22,11 +22,19 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom);
 	NSPoint preDragOffset;
 	short zoom;
 	ImageGetter *_getter;
+
+	BOOL _shouldLoadNewImages;
 }
+
+@property (assign) BOOL shouldLoadNewImages;
 
 @property (assign) short zoom;
 @property (assign) NSPoint center;
 @property (retain) NSMutableArray *cells;
 @property (retain) ImageGetter * getter;
+
+-(NSPoint)pointForLatitude:(double)latitude longitude:(double)longitude;
+-(NSSize)calculateSizeRectArray;
+
 
 @end

@@ -11,11 +11,12 @@
 
 @implementation Overlay
 
+@synthesize paths;
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-		
+		self.paths=[NSMutableDictionary dictionaryWithCapacity:1];
     }
     
     return self;
@@ -25,8 +26,13 @@
 {
 	[[NSColor redColor]set];
 	Viewer *sv=((Viewer *)self.superview);
-	NSPoint pnt=GMMakePoint(41, -111, sv.zoom);
-	NSRectFill(NSOffsetRect(NSMakeRect(pnt.x*IMAGE_WIDTH, pnt.y*IMAGE_HEIGHT, 10, 10),-sv.center.x-IMAGE_WIDTH,-sv.center.y-IMAGE_HEIGHT));
+	NSPoint pnt=[sv pointForLatitude:41.269878 longitude:-111.806490];
+	NSBezierPath *bp=[NSBezierPath bezierPath];
+	[bp moveToPoint:NSMakePoint(self.frame.size.width/2, self.frame.size.height/2)];
+	[bp lineToPoint:pnt];
+	[bp stroke];
+	
+	//NSRectFill(NSMakeRect(pnt.x, pnt.y, 2000, 2000));
 }
 -(BOOL)acceptsFirstResponder{
 	return YES;

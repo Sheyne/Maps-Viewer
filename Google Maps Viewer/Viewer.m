@@ -27,6 +27,8 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom){
 
 @implementation Viewer
 
+
+@synthesize shouldLoadNewImages=_shouldLoadNewImages;
 @synthesize getter=_getter;
 @synthesize center=_center;
 @synthesize cells=_cells;
@@ -44,28 +46,43 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom){
 		rect=NSMakeRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
 		self.zoom=10;
 		self.getter=[ImageGetter getter];
-		self.getter.delegate=self;
-		NSPoint pnt=GMMakePoint(41, -111, self.zoom);
-		self.center=NSMakePoint(pnt.x*IMAGE_WIDTH, pnt.y*IMAGE_HEIGHT);
+		self.getter.viewer=self;
+		NSPoint pnt=GMMakePoint( 41, -111, self.zoom);
+		self.center=NSMakePoint(pnt.x*IMAGE_WIDTH+self.frame.size.width/2, pnt.y*IMAGE_HEIGHT+self.frame.size.height/2);
     }
     
     return self;
+}
+
+-(NSPoint)pointForLatitude:(double)latitude longitude:(double)longitude{
+	NSPoint pnt=GMMakePoint(latitude, longitude, self.zoom);
+	pnt.x+=1;
+	//x may be subject to error;
+	pnt.x*=IMAGE_WIDTH;	
+	pnt.y-=[self calculateSizeRectArray].height-2;
+	pnt.y*=-IMAGE_HEIGHT;
+	pnt.x-=self.center.x+IMAGE_WIDTH;
+	pnt.y+=IMAGE_WIDTH+self.center.y;
+	return pnt;
+}
+
+-(NSSize)calculateSizeRectArray{
+	return NSMakeSize(ceil(self.frame.size.width/IMAGE_WIDTH)+2,ceil(self.frame.size.height/IMAGE_HEIGHT)+2);
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
 	[super drawRect:dirtyRect];
 	[[NSColor redColor] set];
-	int arrayHeight=ceil(self.frame.size.height/IMAGE_HEIGHT)+2;
-	int arrayWidth=ceil(self.frame.size.width/IMAGE_WIDTH)+2;
+	NSSize arraySize=[self calculateSizeRectArray];
 	int i=0,j=0;
-	for (i=0; i<arrayWidth; i++)
-		for (j=0; j<arrayHeight; j++){
+	for (i=0; i<arraySize.width; i++)
+		for (j=0; j<arraySize.height; j++){
 			int xpos=((int)self.center.x/IMAGE_WIDTH)+i,
 				ypos=((int)self.center.y/IMAGE_HEIGHT)+j;
 			NSImage *image=[self.getter imageForX:xpos y:ypos z:self.zoom];
 			NSPoint pnt=NSMakePoint((int)((i)*IMAGE_WIDTH-fmod(self.center.x,IMAGE_WIDTH)),
-									(int)((arrayHeight-j-2)*IMAGE_HEIGHT+fmod(self.center.y, IMAGE_HEIGHT)));
+									(int)((arraySize.height-j-2)*IMAGE_HEIGHT+fmod(self.center.y, IMAGE_HEIGHT)));
 			[image drawAtPoint:pnt fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1];
 	
 		}
