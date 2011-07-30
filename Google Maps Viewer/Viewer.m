@@ -47,8 +47,6 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom){
 		self.zoom=10;
 		self.getter=[ImageGetter getter];
 		self.getter.viewer=self;
-		NSPoint pnt=GMMakePoint( 41, -111, self.zoom);
-		self.center=NSMakePoint(pnt.x*IMAGE_WIDTH+self.frame.size.width/2, pnt.y*IMAGE_HEIGHT+self.frame.size.height/2);
     }
     
     return self;
@@ -102,6 +100,12 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom){
 	self.center=NSMakePoint(start.x-event.locationInWindow.x+preDragOffset.x,event.locationInWindow.y-start.y+preDragOffset.y);
 }
 
-
+-(void)centerOnLatitude:(double)latitude longitude:(double)longitude{
+	/*incomplete kinda works (count tiles)*/
+	NSPoint pnt=GMMakePoint(latitude, longitude, self.zoom);
+	pnt.x-=0;
+	pnt.y-=2;
+	self.center=NSMakePoint(pnt.x*IMAGE_WIDTH-self.frame.size.width/2, pnt.y*IMAGE_HEIGHT-self.frame.size.height/2);
+}
 
 @end

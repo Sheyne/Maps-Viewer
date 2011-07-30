@@ -36,5 +36,6 @@ NSPoint GMMakePoint(double latitude, double	longitude, short zoom);
 -(NSPoint)pointForLatitude:(double)latitude longitude:(double)longitude;
 -(NSSize)calculateSizeRectArray;
 
+-(void)centerOnLatitude:(double)latitude longitude:(double)longitude;
 
 @end
